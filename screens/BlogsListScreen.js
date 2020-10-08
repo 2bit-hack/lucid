@@ -1,14 +1,40 @@
-import React from 'react';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import React, {useEffect} from 'react';
+import {FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
 
-const BlogsListScreen = () => {
+import BlogCard from '../components/BlogCard';
+
+const BlogsListScreen = ({navigation}) => {
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'All Scribbles',
+    });
+  }, [navigation]);
+
+  const blogs = useSelector((state) => state.blogs.allBlogs);
+
   return (
-    <View>
-      <Text>BlogsList</Text>
-    </View>
+    <FlatList
+      data={blogs}
+      keyExtractor={(item) => item.id}
+      renderItem={(itemData) => (
+        <BlogCard
+          author={itemData.item.author}
+          title={itemData.item.title}
+          text={itemData.item.text}
+          imageUrl={itemData.item.imageUrl}
+          pressHandler={() =>
+            navigation.navigate('Blog', {
+              author: itemData.item.author,
+              title: itemData.item.title,
+              text: itemData.item.text,
+              imageUrl: itemData.item.imageUrl,
+            })
+          }
+        />
+      )}
+    />
   );
 };
 
 export default BlogsListScreen;
-
-const styles = StyleSheet.create({});

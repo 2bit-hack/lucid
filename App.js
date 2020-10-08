@@ -1,38 +1,43 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
-import blogReducer from './store/reducers/blogReducer';
 
+import colors from './constants/colors';
+
+import BlogsListScreen from './screens/BlogsListScreen';
+import BlogScreen from './screens/BlogScreen';
+
+import blogReducer from './store/reducers/blogReducer';
 const rootReducer = combineReducers({
-  blog: blogReducer,
+  blogs: blogReducer,
 });
 
 const store = createStore(rootReducer);
+
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <>
       <Provider store={store}>
         <NavigationContainer>
-          <SafeAreaView style={styles.container}>
-            <View>
-              <Text>lucid</Text>
-            </View>
-          </SafeAreaView>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: colors.MetallicSeaweed,
+              },
+              headerTintColor: 'white',
+              headerTitleAlign: 'center',
+            }}>
+            <Stack.Screen name="Blogs" component={BlogsListScreen} />
+            <Stack.Screen name="Blog" component={BlogScreen} />
+          </Stack.Navigator>
         </NavigationContainer>
       </Provider>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default App;
