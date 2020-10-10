@@ -8,6 +8,8 @@ import {
   Chip,
   Button,
 } from 'react-native-paper';
+import {useHeaderHeight} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector, useDispatch} from 'react-redux';
 
 import * as favoritesActions from '../store/actions/favoritesActions';
@@ -15,6 +17,8 @@ import colors from '../constants/colors';
 
 const BlogScreen = ({route, navigation}) => {
   const {author, title, text, imageUrl, tag} = route.params.blog;
+
+  const headerHeight = useHeaderHeight();
 
   const dispatch = useDispatch();
 
@@ -32,22 +36,24 @@ const BlogScreen = ({route, navigation}) => {
       headerRight: () => (
         <Button
           mode="text"
-          color={colors.BeauBlue}
-          icon={idx === -1 ? 'heart' : 'heart-outline'}
+          color={colors.MetallicSeaweed}
           onPress={() => {
             idx === -1
               ? dispatch(favoritesActions.addToFavorites(route.params.blog))
               : dispatch(
                   favoritesActions.removeFromFavorites(route.params.blog),
                 );
-          }}
-        />
+          }}>
+          <Icon name={idx === -1 ? 'heart' : 'heart-o'} size={20} />
+        </Button>
       ),
     });
   }, [navigation, dispatch, route.params.blog, idx]);
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll}>
+    <ScrollView
+      style={{marginTop: headerHeight}}
+      contentContainerStyle={styles.scroll}>
       <Card style={styles.card}>
         <Card.Cover style={styles.img} source={{uri: imageUrl}} />
         <Card.Content>
