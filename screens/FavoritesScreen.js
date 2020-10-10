@@ -7,7 +7,7 @@ import BlogCard from '../components/BlogCard';
 const FavoritesScreen = ({navigation}) => {
   useEffect(() => {
     navigation.setOptions({
-      title: 'Favorites',
+      title: 'My Favorites',
     });
   }, [navigation]);
 

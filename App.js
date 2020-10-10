@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {Button} from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 
@@ -20,6 +22,31 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+// nested drawer navigator config
+function DrawerOverview({navigation}) {
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'All Scribbles',
+    });
+  }, [navigation]);
+
+  return (
+    <Drawer.Navigator
+      initialRouteName="Blogs"
+      screenOptions={{
+        headerTintColor: colors.MetallicSeaweed,
+      }}>
+      <Drawer.Screen name="Blogs" component={BlogsListScreen} />
+      <Drawer.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{title: 'My Favorites'}}
+      />
+    </Drawer.Navigator>
+  );
+}
 
 const App = () => {
   return (
@@ -34,9 +61,8 @@ const App = () => {
               headerTintColor: 'white',
               headerTitleAlign: 'center',
             }}>
-            <Stack.Screen name="Blogs" component={BlogsListScreen} />
+            <Stack.Screen name="Blogs" component={DrawerOverview} />
             <Stack.Screen name="Blog" component={BlogScreen} />
-            <Stack.Screen name="Favorites" component={FavoritesScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
