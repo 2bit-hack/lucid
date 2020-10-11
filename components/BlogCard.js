@@ -7,7 +7,14 @@ import colors from '../constants/colors';
 const BlogCard = ({blog, pressHandler}) => {
   return (
     <Card style={styles.card} onPress={pressHandler}>
-      <Card.Cover style={styles.img} source={{uri: blog.imageUrl}} />
+      <Card.Cover
+        style={styles.img}
+        source={{
+          uri: blog.imageUrl
+            ? blog.imageUrl
+            : 'http://placeimg.com/640/480/nature/grayscale',
+        }}
+      />
       <Card.Content>
         <View style={styles.meta}>
           <Title numberOfLines={1} style={styles.title}>
@@ -30,9 +37,10 @@ const BlogCard = ({blog, pressHandler}) => {
 
 const styles = StyleSheet.create({
   card: {
+    flexGrow: 1,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
     padding: '5%',
     margin: '5%',
     borderWidth: 1,
@@ -41,8 +49,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   title: {
     color: colors.MetallicSeaweed,

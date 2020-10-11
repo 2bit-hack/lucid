@@ -1,18 +1,17 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  Image,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {StyleSheet, ScrollView, Image, View} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch} from 'react-redux';
+
+import * as blogActions from '../store/actions/blogActions';
 
 import colors from '../constants/colors';
 
 const CreateBlogScreen = ({navigation}) => {
   const headerHeight = useHeaderHeight();
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState('');
   const [tag, setTag] = useState('');
@@ -22,21 +21,38 @@ const CreateBlogScreen = ({navigation}) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button mode="text" color={colors.MetallicSeaweed} onPress={() => {}}>
+        <Button
+          mode="text"
+          color={colors.MetallicSeaweed}
+          disabled={!(title.trim() && tag.trim() && text.trim())}
+          onPress={() => {
+            dispatch(
+              blogActions.addBlog({
+                // id: (len + 1).toString(),
+                author: 'Random Guy',
+                authorId: '1',
+                title: title.trim(),
+                text: text.trim(),
+                imageUrl: url,
+                tag: tag.trim(),
+              }),
+            );
+            setTitle('');
+            setTag('');
+            setUrl('');
+            setText('');
+          }}>
           <Icon name="save" size={20} />
         </Button>
       ),
     });
-  }, [navigation]);
+  }, [navigation, dispatch, title, text, url, tag]);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="height"
-      keyboardVerticalOffset={30}>
-      <ScrollView
-        style={{paddingTop: headerHeight}}
-        contentContainerStyle={styles.contentContainer}>
+    <ScrollView
+      style={{marginTop: headerHeight}}
+      contentContainerStyle={styles.contentContainer}>
+      <View style={styles.container}>
         <TextInput
           mode="outlined"
           label="Title"
@@ -72,8 +88,8 @@ const CreateBlogScreen = ({navigation}) => {
           value={text}
           onChangeText={(text_) => setText(text_)}
         />
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -91,7 +107,7 @@ const styles = StyleSheet.create({
     paddingVertical: '1%',
   },
   imageDisplay: {
-    height: '30%',
+    height: 200,
     width: '100%',
     marginVertical: '3%',
   },

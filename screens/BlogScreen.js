@@ -55,7 +55,14 @@ const BlogScreen = ({route, navigation}) => {
       style={{marginTop: headerHeight}}
       contentContainerStyle={styles.scroll}>
       <Card style={styles.card}>
-        <Card.Cover style={styles.img} source={{uri: imageUrl}} />
+        <Card.Cover
+          style={styles.img}
+          source={{
+            uri: imageUrl
+              ? imageUrl
+              : 'http://placeimg.com/640/480/nature/grayscale',
+          }}
+        />
         <Card.Content>
           <View style={styles.meta}>
             <Title style={styles.title}>{title}</Title>
@@ -75,9 +82,10 @@ export default BlogScreen;
 
 const styles = StyleSheet.create({
   card: {
+    flexGrow: 1,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
     elevation: 1,
   },
   scroll: {
@@ -85,8 +93,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   title: {
     color: colors.MetallicSeaweed,

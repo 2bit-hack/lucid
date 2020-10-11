@@ -8,7 +8,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {NavigationContainer, DrawerActions} from '@react-navigation/native';
 import {createStackNavigator, useHeaderHeight} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createStore, combineReducers} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
+import ReduxThunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 
 import colors from './constants/colors';
@@ -36,7 +37,7 @@ const theme = {
   },
 };
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
