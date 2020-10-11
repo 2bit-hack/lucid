@@ -44,7 +44,7 @@ const BlogScreen = ({route, navigation}) => {
                   favoritesActions.removeFromFavorites(route.params.blog),
                 );
           }}>
-          <Icon name={idx === -1 ? 'heart' : 'heart-o'} size={20} />
+          <Icon name={idx === -1 ? 'heart-o' : 'heart'} size={20} />
         </Button>
       ),
     });
