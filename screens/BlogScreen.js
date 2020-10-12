@@ -23,7 +23,7 @@ const BlogScreen = ({route, navigation}) => {
   const dispatch = useDispatch();
 
   const favorites = useSelector((state) => state.favorites.favorites);
-  let idx = favorites.indexOf(route.params.blog);
+  let isPresent = favorites[route.params.blog.id];
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,17 +38,17 @@ const BlogScreen = ({route, navigation}) => {
           mode="text"
           color={colors.MetallicSeaweed}
           onPress={() => {
-            idx === -1
-              ? dispatch(favoritesActions.addToFavorites(route.params.blog))
-              : dispatch(
+            isPresent
+              ? dispatch(
                   favoritesActions.removeFromFavorites(route.params.blog),
-                );
+                )
+              : dispatch(favoritesActions.addToFavorites(route.params.blog));
           }}>
-          <Icon name={idx === -1 ? 'heart-o' : 'heart'} size={20} />
+          <Icon name={isPresent ? 'heart' : 'heart-o'} size={20} />
         </Button>
       ),
     });
-  }, [navigation, dispatch, route.params.blog, idx]);
+  }, [navigation, dispatch, route.params.blog, isPresent]);
 
   return (
     <ScrollView

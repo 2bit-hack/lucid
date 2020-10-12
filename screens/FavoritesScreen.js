@@ -15,11 +15,16 @@ const FavoritesScreen = ({navigation}) => {
   const headerHeight = useHeaderHeight();
 
   const favorites = useSelector((state) => state.favorites.favorites);
+  // TODO: Do this in action creator
+  let favoritesArr = [];
+  for (const key in favorites) {
+    favoritesArr.push(favorites[key]);
+  }
 
   return (
     <FlatList
       style={{marginTop: headerHeight}}
-      data={favorites}
+      data={favoritesArr}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => (
         <BlogCard

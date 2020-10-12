@@ -1,7 +1,7 @@
 import {ADD_BLOG, GET_BLOGS} from '../actions/blogActions';
 
 const INITIAL_STATE = {
-  allBlogs: [],
+  allBlogs: {},
 };
 
 const blogReducer = (state = INITIAL_STATE, action) => {
@@ -10,7 +10,13 @@ const blogReducer = (state = INITIAL_STATE, action) => {
       return {allBlogs: action.blogs};
     case ADD_BLOG:
       const blogToAdd = action.blog;
-      return {...state, allBlogs: [...state.allBlogs, blogToAdd]};
+      return {
+        ...state,
+        allBlogs: {
+          ...state.allBlogs,
+          [blogToAdd.id]: blogToAdd,
+        },
+      };
     default:
       return state;
   }

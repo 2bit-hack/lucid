@@ -5,31 +5,28 @@ import {
 
 // TODO: Use Set or Object instead for faster lookup
 const INITIAL_STATE = {
-  favorites: [],
+  favorites: {},
 };
 
+// TODO: Pass only id instead of entire blog
 const favoritesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_TO_FAVORITES:
       const favoriteBlog = action.blog;
-      let idx = state.favorites.indexOf(favoriteBlog);
-      if (idx !== -1) {
+      const idAdd = favoriteBlog.id;
+      if (state.favorites[idAdd]) {
         return state;
       }
-      return {...state, favorites: [...state.favorites, favoriteBlog]};
+      return {...state, favorites: {...state.favorites, [idAdd]: favoriteBlog}};
     case REMOVE_FROM_FAVORITES:
       const removeBlog = action.blog;
-      idx = state.favorites.indexOf(removeBlog);
-      if (idx === -1) {
+      const idRemove = removeBlog.id;
+      if (!state.favorites[idRemove]) {
         return state;
       }
-      return {
-        ...state,
-        favorites: [
-          ...state.favorites.slice(0, idx),
-          ...state.favorites.slice(idx + 1),
-        ],
-      };
+      let newFavorites = Object.assign({}, state.favorites);
+      delete newFavorites[idRemove];
+      return {...state, favorites: newFavorites};
     default:
       return state;
   }
