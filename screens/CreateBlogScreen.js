@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, ScrollView, Image, View} from 'react-native';
+import {StyleSheet, ScrollView, Image, View, ToastAndroid} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/stack';
 import {TextInput, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -25,18 +25,25 @@ const CreateBlogScreen = ({navigation}) => {
           mode="text"
           color={colors.MetallicSeaweed}
           disabled={!(title.trim() && tag.trim() && text.trim())}
-          onPress={() => {
-            dispatch(
-              blogActions.addBlog({
-                // id: (len + 1).toString(),
-                author: 'Random Guy',
-                authorId: '1',
-                title: title.trim(),
-                text: text.trim(),
-                imageUrl: url,
-                tag: tag.trim(),
-              }),
-            );
+          onPress={async () => {
+            try {
+              await dispatch(
+                blogActions.addBlog({
+                  author: 'Random Guy',
+                  authorId: '1',
+                  title: title.trim(),
+                  text: text.trim(),
+                  imageUrl: url,
+                  tag: tag.trim(),
+                }),
+              );
+            } catch (err) {
+              ToastAndroid.show(
+                'Failed to connect to server :(',
+                ToastAndroid.SHORT,
+              );
+            }
+
             setTitle('');
             setTag('');
             setUrl('');

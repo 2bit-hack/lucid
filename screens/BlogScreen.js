@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, ScrollView, View, Text} from 'react-native';
+import {StyleSheet, ScrollView, View, Text, ToastAndroid} from 'react-native';
 import {
   Card,
   Title,
@@ -12,24 +12,23 @@ import {useHeaderHeight} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector, useDispatch} from 'react-redux';
 
-import * as favoritesActions from '../store/actions/favoritesActions';
+import * as blogActions from '../store/actions/blogActions';
 import colors from '../constants/colors';
 
 const BlogScreen = ({route, navigation}) => {
-  const {author, title, text, imageUrl, tag} = route.params.blog;
-
-  const headerHeight = useHeaderHeight();
-
-  const dispatch = useDispatch();
-
-  const favorites = useSelector((state) => state.favorites.favorites);
-  let isPresent = favorites[route.params.blog.id];
+  const {author, title, text, imageUrl, tag, id, fav} = route.params.blog;
 
   useEffect(() => {
     navigation.setOptions({
       title: title,
     });
-  }, [navigation, title]);
+  }, [navigation, title, dispatch]);
+
+  const headerHeight = useHeaderHeight();
+
+  const dispatch = useDispatch();
+
+  const isFav = useSelector((state) => state.blogs.allBlogs)[id].fav;
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,18 +36,36 @@ const BlogScreen = ({route, navigation}) => {
         <Button
           mode="text"
           color={colors.MetallicSeaweed}
-          onPress={() => {
-            isPresent
-              ? dispatch(
-                  favoritesActions.removeFromFavorites(route.params.blog),
-                )
-              : dispatch(favoritesActions.addToFavorites(route.params.blog));
+          onPress={async () => {
+            if (isFav) {
+              try {
+                await dispatch(blogActions.removeFav(id));
+              } catch (err) {
+                ToastAndroid.show(
+                  'Failed to connect to server :(',
+                  ToastAndroid.SHORT,
+                );
+              }
+            } else {
+              try {
+                await dispatch(blogActions.addFav(id));
+              } catch (err) {
+                ToastAndroid.show(
+                  'Failed to connect to server :(',
+                  ToastAndroid.SHORT,
+                );
+              }
+            }
+            // isFav
+            //   ? dispatch(blogActions.removeFav(id))
+            //   : dispatch(blogActions.addFav(id));
+            dispatch(blogActions.fetchBlogs());
           }}>
-          <Icon name={isPresent ? 'heart' : 'heart-o'} size={20} />
+          <Icon name={isFav ? 'heart' : 'heart-o'} size={20} />
         </Button>
       ),
     });
-  }, [navigation, dispatch, route.params.blog, isPresent]);
+  }, [navigation, dispatch, route.params.blog, fav, id, isFav]);
 
   return (
     <ScrollView

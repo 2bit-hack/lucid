@@ -20,11 +20,9 @@ import CreateBlogScreen from './screens/CreateBlogScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 
 import blogReducer from './store/reducers/blogReducer';
-import favoritesReducer from './store/reducers/favoritesReducer';
 import {StatusBar} from 'react-native';
 const rootReducer = combineReducers({
   blogs: blogReducer,
-  favorites: favoritesReducer,
 });
 
 const theme = {

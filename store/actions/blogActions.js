@@ -1,35 +1,29 @@
 import FIREBASE_URL from '../../keys';
 
-import Blog from '../../models/blog';
-
-export const ADD_BLOG = 'ADD_BLOG';
 export const GET_BLOGS = 'GET_BLOGS';
+export const ADD_BLOG = 'ADD_BLOG';
+export const ADD_FAV = 'ADD_FAV';
+export const REMOVE_FAV = 'REMOVE_FAV';
 
 export const fetchBlogs = () => {
   return async (dispatch) => {
-    const res = await fetch(`${FIREBASE_URL}blogs.json`);
+    try {
+      const res = await fetch(`${FIREBASE_URL}blogs.json`);
 
-    const resData = await res.json();
-    const loadedBlogs = [];
+      if (!res.ok) {
+        throw new Error('An error occurred!');
+      }
 
-    for (const key in resData) {
-      loadedBlogs.push(
-        new Blog(
-          key,
-          resData[key].blog.author,
-          resData[key].blog.authorId,
-          resData[key].blog.title,
-          resData[key].blog.text,
-          resData[key].blog.imageUrl,
-          resData[key].blog.tag,
-        ),
-      );
+      const resData = await res.json();
+
+      dispatch({
+        type: GET_BLOGS,
+        blogs: resData,
+      });
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-
-    dispatch({
-      type: GET_BLOGS,
-      blogs: loadedBlogs,
-    });
   };
 };
 
@@ -40,16 +34,48 @@ export const addBlog = (blog) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        blog,
-      }),
+      body: JSON.stringify({...blog, fav: false}),
     });
 
     const resData = await res.json();
 
     dispatch({
       type: ADD_BLOG,
-      blog: {...blog, id: resData.name},
+      blog: {[resData.name]: blog},
+    });
+  };
+};
+
+export const addFav = (id) => {
+  return async (dispatch) => {
+    await fetch(`${FIREBASE_URL}blogs/${id}.json`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({fav: true}),
+    });
+
+    dispatch({
+      type: ADD_FAV,
+      id,
+    });
+  };
+};
+
+export const removeFav = (id) => {
+  return async (dispatch) => {
+    await fetch(`${FIREBASE_URL}blogs/${id}.json`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({fav: false}),
+    });
+
+    dispatch({
+      type: REMOVE_FAV,
+      id,
     });
   };
 };
