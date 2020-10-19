@@ -79,7 +79,6 @@ const CreateBlogScreen = ({navigation}) => {
             uri: url ? url : 'http://placeimg.com/640/480/nature/grayscale',
           }}
           style={styles.imageDisplay}
-          resizeMode="stretch"
         />
         <TextInput
           mode="outlined"

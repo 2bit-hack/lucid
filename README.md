@@ -4,4 +4,13 @@ A blog app where users can read and write blogs from across the world
 
 ## NOTE
 
-Create your own keys.js file with a project url and a real time database instance
+This app is work in progress
+Create your own keys.js file with a project url and a Firebase real time database instance
+
+## Tech Stack
+
+React Native
+React Navigation
+React Native Paper
+Redux
+Firebase Real Time Database

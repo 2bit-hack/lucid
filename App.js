@@ -50,8 +50,9 @@ function DrawerOverview({navigation}) {
       drawerStyle={{
         paddingTop: headerHeight,
       }}
-      screenOptions={{
-        headerTintColor: colors.MetallicSeaweed,
+      drawerContentOptions={{
+        activeTintColor: colors.MetallicSeaweed,
+        activeBackgroundColor: colors.BeauBlue,
       }}>
       <Drawer.Screen name="Blogs" component={BlogsListScreen} />
       <Drawer.Screen
@@ -75,9 +76,6 @@ const App = () => {
           <NavigationContainer>
             <Stack.Navigator
               screenOptions={{
-                // headerStyle: {
-                //   backgroundColor: colors.MetallicSeaweed,
-                // },
                 headerTransparent: true,
                 headerTintColor: colors.MetallicSeaweed,
                 headerTitleAlign: 'center',
